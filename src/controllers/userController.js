@@ -72,35 +72,6 @@ exports.getUserById = async (req, res) => {
 
 /**
  * @swagger
- * /users:
- *   post:
- *     summary: Register a new user
- */
-exports.registerUser = async (req, res) => {
-  const { username, password } = req.body;
-  
-  if (!username || !password) {
-    return res.status(400).json({ message: "Username and password are required", statusCode: 400 });
-  }
-
-  try {
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = {
-      id: db.users.length + 1,
-      username,
-      password: hashedPassword,
-      role: 'User', // Default role for new users
-    };
-    db.users.push(newUser);
-    res.status(201).json(newUser);
-  } catch (error) {
-    console.error("Error registering user:", error);
-    res.status(500).json({ message: "Server error", statusCode: 500 });
-  }
-};
-
-/**
- * @swagger
  * /users/{id}:
  *   put:
  *     summary: Update user by ID (Admin only)

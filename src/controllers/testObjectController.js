@@ -6,6 +6,7 @@ const getTestObjects = (req, res) => {
   try {
     const testObjects = db.testObjects; // In-memory data
     res.status(200).json(testObjects); // Return list of all test objects
+    console.log(`Successfully found ${testObjects.length} TestObjects.`);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server error, unable to retrieve test objects' });
@@ -31,6 +32,7 @@ const getTestObjectById = (req, res) => {
 
     // If the TestObject is found, return it
     res.status(200).json(testObject);
+    console.log(`Successfully found TestObject with ID ${id}.  ${JSON.stringify(testObject)}`);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server error, unable to retrieve test object' });
@@ -41,6 +43,29 @@ const getTestObjectById = (req, res) => {
 const createTestObject = (req, res) => {
   const { name, description } = req.body;
 
+  // Check if the 'name' field exists in the request body
+  if (!name) {
+    console.log('Validation failed: Name is required');
+    return res.status(400).json({
+      error: {
+        message: 'Name is required',
+        status: 400,
+      },
+    });
+  }
+
+  // Check if a TestObject with the same name already exists
+  const existingObject = db.testObjects.find((obj) => obj.name === name);
+  if (existingObject) {
+    console.log(`TestObject creation failed: Name '${name}' already exists`);
+    return res.status(400).json({
+      error: {
+        message: `TestObject with the name '${name}' already exists`,
+        status: 400,
+      },
+    });
+  }
+  
   try {
     // Create new TestObject object
     const newTestObject = {
@@ -50,6 +75,7 @@ const createTestObject = (req, res) => {
     };
 
     db.testObjects.push(newTestObject); // Add to in-memory DB
+    console.log(`New TestObject was added to database in memory: ${JSON.stringify(newTestObject)}`);
 
     res.status(201).json(newTestObject); // Return the created TestObject
   } catch (error) {
@@ -80,6 +106,7 @@ const updateTestObject = (req, res) => {
     testObject.description = description || testObject.description;
 
     res.status(200).json(testObject); // Return the updated TestObject
+    console.log(`TestObject was updated to database in memory: ${JSON.stringify(testObject)}`);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server error, unable to update test object' });
@@ -106,6 +133,7 @@ const deleteTestObject = (req, res) => {
     db.testObjects.splice(testObjectIndex, 1);
 
     res.status(200).json({ message: `TestObject with ID ${id} has been deleted` });
+    console.log(`TestObject with ID ${id} was deleted from database in memory.`);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server error, unable to delete test object' });

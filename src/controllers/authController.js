@@ -30,9 +30,10 @@ const register = (req, res) => {
     users.push(newUser);
 
     res.status(201).json({
-      message: 'User registered successfully',
+      message: `New User ${username} registered successfully`,
       user: { id: newUser.id, username: newUser.username, role: newUser.role }
     });
+    console.log(`New user ${username} registered successfully.`);
   });
 };
 
@@ -62,6 +63,7 @@ const login = (req, res) => {
       message: 'Login successful',
       token,
     });
+    console.log(`User ${user.username} logged in successfully with "${user.role}" role and issued JwtToken to expire in 1h.`);
   });
 };
 

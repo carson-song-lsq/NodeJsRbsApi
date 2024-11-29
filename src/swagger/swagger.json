@@ -163,39 +163,6 @@
           "403": { "description": "Forbidden", "content": { "application/json": { "$ref": "#/components/schemas/Error" } } },
           "500": { "description": "Server error", "content": { "application/json": { "$ref": "#/components/schemas/Error" } } }
         }
-      },
-      "post": {
-        "tags": ["Users"],
-        "summary": "Create a new user",
-        "description": "Create a new user (Admin only)",
-        "security": [
-          {
-            "BearerAuth": []
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "username": { "type": "string" },
-                  "password": { "type": "string" },
-                  "role": { "type": "string" }
-                },
-                "required": ["username", "password", "role"]
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": { "description": "User created successfully" },
-          "400": { "description": "Bad request", "content": { "application/json": { "$ref": "#/components/schemas/Error" } } },
-          "401": { "description": "Unauthorized", "content": { "application/json": { "$ref": "#/components/schemas/Error" } } },
-          "403": { "description": "Forbidden", "content": { "application/json": { "$ref": "#/components/schemas/Error" } } },
-          "500": { "description": "Server error", "content": { "application/json": { "$ref": "#/components/schemas/Error" } } }
-        }
       }
     },
     "/users/{id}": {

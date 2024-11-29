@@ -104,6 +104,29 @@ exports.createClaim = (req, res) => {
     return res.status(400).json({ message: 'Name and description are required', statusCode: 400 });
   }
 
+  // Check if the 'name' field exists in the request body
+  if (!name) {
+    console.log('Validation failed: Name is required');
+    return res.status(400).json({
+      error: {
+        message: 'Name is required',
+        status: 400,
+      },
+    });
+  }
+
+  // Check if a Claim with the same name already exists
+  const existingObject = db.claims.find((obj) => obj.name === name);
+  if (existingObject) {
+    console.log(`Claim creation failed: Name '${name}' already exists`);
+    return res.status(400).json({
+      error: {
+        message: `Claim with the name '${name}' already exists`,
+        status: 400,
+      },
+    });
+  }
+
   try {
     const newClaim = {
       id: db.claims.length + 1,

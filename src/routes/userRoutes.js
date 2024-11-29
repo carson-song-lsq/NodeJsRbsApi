@@ -102,44 +102,6 @@ router.get("/:id", verifyJwtToken, verifyRole(['admin']), userController.getUser
 /**
  * @swagger
  * path:
- *  /users:
- *    post:
- *      tags: [Users]
- *      summary: Register a new user
- *      description: Register a new user with the default role (any user can register)
- *      requestBody:
- *        required: true
- *        content:
- *          application/json:
- *            schema:
- *              type: object
- *              properties:
- *                username:
- *                  type: string
- *                password:
- *                  type: string
- *              required:
- *                - username
- *                - password
- *      responses:
- *        201:
- *          description: User registered successfully
- *        400:
- *          description: Bad request
- *          content:
- *            application/json:
- *              $ref: "#/components/schemas/Error"
- *        500:
- *          description: Server error
- *          content:
- *            application/json:
- *              $ref: "#/components/schemas/Error"
- */
-router.post("/", userController.registerUser);
-
-/**
- * @swagger
- * path:
  *  /users/{id}:
  *    put:
  *      tags: [Users]
