@@ -1,5 +1,5 @@
 const db = require('../db/inMemoryDB'); // Import the database module (in-memory DB)
-const { validateTestObjectId } = require('../utils/validation'); // Assuming you have a utility for validation
+const { validateTestObjectId ,sanitizeString} = require('../utils/validation'); // Assuming you have a utility for validation
 
 // Function to get all TestObjects
 const getTestObjects = (req, res) => {
@@ -43,8 +43,11 @@ const getTestObjectById = (req, res) => {
 const createTestObject = (req, res) => {
   const { name, description } = req.body;
 
+  // Sanitize username to prevent injection
+  const sanitizedName = sanitizeString(name);
+
   // Check if the 'name' field exists in the request body
-  if (!name) {
+  if (!sanitizedName) {
     console.log('Validation failed: Name is required');
     return res.status(400).json({
       error: {
@@ -55,23 +58,24 @@ const createTestObject = (req, res) => {
   }
 
   // Check if a TestObject with the same name already exists
-  const existingObject = db.testObjects.find((obj) => obj.name === name);
+  const existingObject = db.testObjects.find((obj) => obj.name === sanitizedName);
   if (existingObject) {
-    console.log(`TestObject creation failed: Name '${name}' already exists`);
+    console.log(`TestObject creation failed: Name '${sanitizedName}' already exists`);
     return res.status(400).json({
       error: {
-        message: `TestObject with the name '${name}' already exists`,
+        message: `TestObject with the name '${sanitizedName}' already exists`,
         status: 400,
       },
     });
   }
   
+  const sanitizedDescription = sanitizeString(description);
   try {
     // Create new TestObject object
     const newTestObject = {
       id: db.testObjects.length + 1, // Simple ID generation for the in-memory DB
-      name,
-      description
+      name: sanitizedName,
+      description: sanitizedDescription
     };
 
     db.testObjects.push(newTestObject); // Add to in-memory DB
@@ -94,6 +98,20 @@ const updateTestObject = (req, res) => {
     return res.status(400).json({ message: 'Invalid ID format' });
   }
 
+  // Sanitize username to prevent injection
+  const sanitizedName = sanitizeString(name);
+
+  // Check if the 'name' field exists in the request body
+  if (!sanitizedName) {
+    console.log('Validation failed: Name is required');
+    return res.status(400).json({
+      error: {
+        message: 'Name is required',
+        status: 400,
+      },
+    });
+  }
+
   try {
     const testObject = db.testObjects.find(obj => obj.id === parseInt(id));
 
@@ -102,8 +120,8 @@ const updateTestObject = (req, res) => {
     }
 
     // Update the TestObject
-    testObject.name = name || testObject.name;
-    testObject.description = description || testObject.description;
+    testObject.name = sanitizedName;
+    testObject.description = sanitizeString(description);
 
     res.status(200).json(testObject); // Return the updated TestObject
     console.log(`TestObject was updated to database in memory: ${JSON.stringify(testObject)}`);

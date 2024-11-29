@@ -1,13 +1,45 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { users } = require('../db/inMemoryDB'); // Your in-memory user database
+const {validateUsername} = require('../utils/validation')
 
 // Controller for user registration
 const register = (req, res) => {
-  const { username, password } = req.body;
+  const { username, password, email, phone } = req.body;
+
+  if (!validateEmail(email)) {
+    return res.status(400).json({
+      error: {
+        message: 'Invalid email format',
+        status: 400,
+      },
+    });
+  }
+  
+  if (phone && !validatePhone(phone)) {
+    return res.status(400).json({
+      error: {
+        message: 'Invalid phone number format',
+        status: 400,
+      },
+    });
+  }
+
+// Validate username
+if (!validateUsername(username)) {
+  return res.status(400).json({
+    error: {
+      message: 'Invalid username format. Only alphanumeric characters and underscores are allowed.',
+      status: 400,
+    },
+  });
+}
+
+// Sanitize username to prevent injection
+const sanitizedUsername = sanitizeString(username);
 
   // Check if the user already exists
-  const existingUser = users.find(user => user.username === username);
+  const existingUser = users.find(user => user.username === sanitizedUsername);
   if (existingUser) {
     return res.status(400).json({ message: 'User already exists' });
   }
@@ -21,8 +53,10 @@ const register = (req, res) => {
     // Create the new user
     const newUser = {
       id: users.length + 1, // For simplicity, increment user ID
-      username,
-      password: hashedPassword, // Store hashed password
+      name: sanitizedUsername,
+      password: hashedPassword, // Store hashed password,
+      email: email,
+      phone: phone,
       role: 'user', // Default role
     };
 
@@ -30,10 +64,10 @@ const register = (req, res) => {
     users.push(newUser);
 
     res.status(201).json({
-      message: `New User ${username} registered successfully`,
+      message: `New User ${sanitizedUsername} registered successfully`,
       user: { id: newUser.id, username: newUser.username, role: newUser.role }
     });
-    console.log(`New user ${username} registered successfully.`);
+    console.log(`New user ${sanitizedUsername} registered successfully.`);
   });
 };
 

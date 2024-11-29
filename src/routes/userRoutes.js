@@ -127,6 +127,10 @@ router.get("/:id", verifyJwtToken, verifyRole(['admin']), userController.getUser
  *                  type: string
  *                password:
  *                  type: string
+ *               email:
+ *                 type: string
+ *               phone:
+ *                 type: string
  *      responses:
  *        200:
  *          description: User updated successfully

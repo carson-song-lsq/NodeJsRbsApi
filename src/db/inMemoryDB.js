@@ -20,6 +20,8 @@ bcrypt.hash(defaultAdminPassword, 10, (err, hashedPassword) => {
     id: 1,
     username: 'admin',
     password: hashedPassword,
+    email: 'admin@example.com',
+    phone: '1234567890',
     role: 'admin',
     permissions: ['CreateUser', 'CreateRole', 'CreateClaim', 'CreateTestObject', 'UpdateUser', 'DeleteUser', 'UpdateRole', 'DeleteRole', 'UpdateClaim', 'DeleteClaim'],
   };
@@ -46,6 +48,8 @@ bcrypt.hash(defaultUser2Password, 10, (err, hashedPassword) => {
     id: 2,
     username: 'user2',
     password: hashedPassword,
+    email: 'user@example.com',
+    phone: '1024567890',
     role: 'user',
     permissions: ['CreateTestObject', 'ReadTestObject', 'UpdateTestObject', 'DeleteTestObject'],
   };

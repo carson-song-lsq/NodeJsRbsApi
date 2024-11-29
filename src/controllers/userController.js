@@ -1,6 +1,7 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const db = require('../db/inMemoryDB'); // Assuming your in-memory DB is set up here
+const { validateUsername } = require('../utils/validation')
 const { JWT_SECRET } = process.env;
 
 /**
@@ -78,9 +79,41 @@ exports.getUserById = async (req, res) => {
  */
 exports.updateUser = async (req, res) => {
   const userId = parseInt(req.params.id, 10);
-  const { username, password } = req.body;
+  const { username, password, name, phone } = req.body;
 
-  if (!username || !password) {
+
+  if (!validateEmail(email)) {
+    return res.status(400).json({
+      error: {
+        message: 'Invalid email format',
+        status: 400,
+      },
+    });
+  }
+
+  if (phone && !validatePhone(phone)) {
+    return res.status(400).json({
+      error: {
+        message: 'Invalid phone number format',
+        status: 400,
+      },
+    });
+  }
+
+  // Validate username
+  if (!validateUsername(username)) {
+    return res.status(400).json({
+      error: {
+        message: 'Invalid username format. Only alphanumeric characters and underscores are allowed.',
+        status: 400,
+      },
+    });
+  }
+
+  // Sanitize username to prevent injection
+  const sanitizedUsername = sanitizeString(username);
+
+  if (!sanitizedUsername || !password) {
     return res.status(400).json({ message: "Username and password are required", statusCode: 400 });
   }
 
@@ -90,9 +123,12 @@ exports.updateUser = async (req, res) => {
       return res.status(404).json({ message: "User not found", statusCode: 404 });
     }
 
-    user.username = username;
+    user.username = sanitizedUsername;
     user.password = await bcrypt.hash(password, 10); // Hash the new password
+    user.email = email;
+    user.phone = phone;
     res.status(200).json(user);
+    console.log(`Successfully update user ${sanitizedUsername}.`);
   } catch (error) {
     console.error("Error updating user:", error);
     res.status(500).json({ message: "Server error", statusCode: 500 });

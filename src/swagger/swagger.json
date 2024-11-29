@@ -30,6 +30,8 @@
         "properties": {
           "id": { "type": "integer", "example": 1 },
           "username": { "type": "string", "example": "johndoe" },
+          "email":{ "type": "string", "example": "johndoe@example.com", "format": "email" },
+          "phone":{ "type": "string", "example": "+1 1234567890"},
           "role": { "type": "string", "example": "admin" }
         }
       },
@@ -83,9 +85,11 @@
                 "type": "object",
                 "properties": {
                   "username": { "type": "string" },
-                  "password": { "type": "string" }
+                  "password": { "type": "string" },
+                  "email":{ "type": "string", "example": "johndoe@example.com", "format": "email" },
+                  "phone":{ "type": "string", "example": "+1 1234567890"}
                 },
-                "required": ["username", "password"]
+                "required": ["username", "password", "email", "phone"]
               }
             }
           }
@@ -230,9 +234,11 @@
                 "type": "object",
                 "properties": {
                   "username": { "type": "string" },
+                  "email":{ "type": "string", "example": "johndoe@example.com", "format": "email" },
+                  "phone":{ "type": "string", "example": "+1 1234567890"},
                   "role": { "type": "string" }
                 },
-                "required": ["username", "role"]
+                "required": ["username", "role", "email", "phone"]
               }
             }
           }
