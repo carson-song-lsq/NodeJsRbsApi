@@ -55,7 +55,7 @@ const validateEmail = (email) => {
 * @returns {boolean}
 */
 const validatePhone = (phone) => {
-  const phoneRegex = /^\+?[0-9]{0-3}\s?[0-9]{10,15}$/;
+  const phoneRegex = /^\+?[0-9]{0,3}\s?[0-9]{10,15}$/;
   return phoneRegex.test(phone);
 };
 
