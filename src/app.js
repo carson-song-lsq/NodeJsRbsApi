@@ -42,6 +42,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 // Error handling for 404 (route not found)
 app.use((req, res, next) => {
   res.status(404).json({ message: 'Route not found' });
+  next();
 });
 
 // Global error handler
@@ -59,6 +60,7 @@ app.use((err, req, res, next) => {
 
   console.log(`Internal Server error occurred: ${err.message}, Stack: ${err.stack}`);
   res.status(500).json({ message: 'Internal server error', error: err.message });
+  next();
 });
 
 module.exports = app;

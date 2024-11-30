@@ -23,7 +23,7 @@ const verifyToken = (token) => {
   try {
     return jwt.verify(token, secretKey);
   } catch (error) {
-    throw new Error('Invalid or expired token');
+    throw new Error(`Invalid or expired token: ${ error}`);
   }
 };
 

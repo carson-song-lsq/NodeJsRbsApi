@@ -1,7 +1,7 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { users } = require('../db/inMemoryDB'); // Your in-memory user database
-const {validateUsername} = require('../utils/validation')
+const {validateUsername, validateEmail, validatePhone, sanitizeString} = require('../utils/validation')
 
 // Controller for user registration
 const register = (req, res) => {

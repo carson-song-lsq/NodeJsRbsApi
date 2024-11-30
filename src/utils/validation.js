@@ -86,5 +86,6 @@ module.exports = {
   validateRole,
   validateEmail,
   validatePhone,
+  validateUsername,
   sanitizeString
 };

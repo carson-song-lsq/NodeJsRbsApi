@@ -1,8 +1,6 @@
 const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
 const db = require('../db/inMemoryDB'); // Assuming your in-memory DB is set up here
-const { validateUsername } = require('../utils/validation')
-const { JWT_SECRET } = process.env;
+const { validateUsername, validateEmail, validatePhone, sanitizeString } = require('../utils/validation')
 
 /**
  * @swagger
@@ -79,7 +77,7 @@ exports.getUserById = async (req, res) => {
  */
 exports.updateUser = async (req, res) => {
   const userId = parseInt(req.params.id, 10);
-  const { username, password, name, phone } = req.body;
+  const { username, password, email, phone } = req.body;
 
 
   if (!validateEmail(email)) {
@@ -157,11 +155,3 @@ exports.deleteUser = async (req, res) => {
     res.status(500).json({ message: "Server error", statusCode: 500 });
   }
 };
-
-/**
- * Generate a JWT token for an authenticated user
- * @param {Object} user The user to generate the token for
- */
-function generateJwtToken(user) {
-  return jwt.sign({ id: user.id, role: user.role }, JWT_SECRET, { expiresIn: '1h' });
-}
