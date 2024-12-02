@@ -100,7 +100,8 @@ Ensure you have the following installed:
 10. (Please keep in mind, User/Role/Claim APIs can only be accessed by admin roles. )
 
 ## TestObjects CRUD operations
-With authorized bearertoken from user2 above, let's have some test calls on TestObjects.
+
+With authorized bearertoken from user2 above, let's have some test calls on TestObjects. Below test steps have already been implemented in tests/testObject.test.js. 
 ### Get all TestObjects
 
 1. Scroll to the bottom and expand TestObjects, GET /testobjects

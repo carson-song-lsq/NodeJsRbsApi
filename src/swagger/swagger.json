@@ -46,7 +46,8 @@
         "type": "object",
         "properties": {
           "id": { "type": "integer", "example": 1 },
-          "name": { "type": "string", "example": "CreateUser" }
+          "name": { "type": "string", "example": "CreateUser" },
+          "description": { "type": "string", "example": "Permission to Create a User" }
         }
       },
       "TestObject": {
@@ -326,9 +327,17 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "name": { "type": "string" }
+                  "name": { "type": "string" },
+                  "permissions": {
+                    "type": "array",
+                    "description": "A list of permissions to assign to the role.",
+                    "items": {
+                      "type": "string",
+                      "example": "CreateUser"
+                    }
+                  }
                 },
-                "required": ["name"]
+                "required": ["name", "permissions"]
               }
             }
           }
@@ -496,9 +505,10 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "name": { "type": "string" }
+                  "name": { "type": "string" },
+                  "description": { "type": "string" }
                 },
-                "required": ["name"]
+                "required": ["name","description"]
               }
             }
           }
@@ -576,9 +586,10 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "name": { "type": "string" }
+                  "name": { "type": "string" },
+                  "description": { "type": "string" }
                 },
-                "required": ["name"]
+                "required": ["name","description"]
               }
             }
           }

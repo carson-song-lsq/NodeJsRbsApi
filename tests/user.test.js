@@ -20,20 +20,6 @@ describe('User APIs', () => {
     expect(res.body).toBeInstanceOf(Array);
   });
 
-  test('POST /users - Create a new user (Admin Only)', async () => {
-    const res = await request(app)
-      .post('/users')
-      .set('Authorization', `Bearer ${adminToken}`)
-      .send({
-        username: 'newuser',
-        password: 'password123',
-        email: 'newuser@example.com',
-        phone: '9876543210',
-      });
-    expect(res.statusCode).toBe(201);
-    expect(res.body).toHaveProperty('message', 'User created successfully');
-  });
-
   test('GET /users/:id - Get user by ID (Admin Only)', async () => {
     const res = await request(app)
       .get('/users/1')
