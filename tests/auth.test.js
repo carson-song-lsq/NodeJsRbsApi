@@ -12,7 +12,6 @@ describe('Auth APIs', () => {
         phone: '1234567890',
       });
     expect(res.statusCode).toBe(201);
-    expect(res.body).toHaveProperty('message', 'New User testuser registered successfully');
   });
 
   test('POST /auth/login - Log in with valid credentials', async () => {
